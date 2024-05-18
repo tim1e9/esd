@@ -1,0 +1,94 @@
+body {
+    /* font-family: "Verdana"; */
+    /* font-family: "Tahoma"; */
+    /* font-family: "Roboto", 'Courier New', Courier, monospace; */
+    /* font-size: large; */
+    /* font-family: "Montserrat", 'Courier New', Courier, monospace; */
+    /* font-family: 'Reddit Sans', 'Courier New', Courier, monospace; */
+    /* font-family: Verdana, 'Courier New', Courier, monospace; */
+    font-family: 'Open Sans', 'Courier New', Courier, monospace;
+}
+
+.header {
+    padding: 20px;
+    background: darkgreen;
+    color: white;
+    margin-left: -8px;
+    margin-right: -8px;
+    margin-top: -11px;
+}
+
+.navigation {
+    height: 5px;
+    overflow: hidden;
+    padding-left: 6px;
+    margin-left: -8px;
+    margin-right: -8px;
+    background-color: #444;
+}
+
+.navigation a {
+    float: left;
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+.navigation a:hover {
+    background-color: white;
+    color: black;
+}
+
+.callout {
+    font-size: xx-large;
+    margin-block: 41px;
+    margin-left: 100px;
+    margin-right: 60px;
+}
+
+.inlineimage {
+    width: 100%;
+    margin-top: 30px;
+    margin-bottom: 50px;
+}
+
+.contents {
+    float: left;
+}
+
+.contents.left {
+    width: 15%;
+    margin: 5px;
+}
+
+.contents.center {
+    width: 75%
+}
+
+.contents.right {
+    width: 5%;
+}
+
+.main-container::after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+@media screen and (max-width: 600px) {
+    .contents.left, .contents.center, .contents.right {
+        width: 100%;
+    }
+}
+
+.footnote {
+    color: #444;
+}
+
+.footer {
+    /* background-color: #F1F1F1; */
+    text-align: right;
+    padding: 10px;
+}
