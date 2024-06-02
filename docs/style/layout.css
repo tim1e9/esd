@@ -77,11 +77,11 @@ body {
     clear: both;
 }
 
-@media screen and (max-width: 600px) {
+/* @media screen and (max-width: 600px) {
     .contents.left, .contents.center, .contents.right {
         width: 100%;
     }
-}
+} */
 
 .footnote {
     color: #444;
