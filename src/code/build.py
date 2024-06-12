@@ -7,8 +7,7 @@ articles_source_dir = "/Users/tdc/dev/ghpages/esd/src/articles/*"
 articles_target_dir = "/Users/tdc/dev/ghpages/esd/docs/articles/"
 article_template_file = "/Users/tdc/dev/ghpages/esd/src/templates/index.html"
 
-
-# Get a list of files - sorted by last modified date
+# Get a list of files from a particular directory. Remove subfolders.
 def getFiles( basedir: str ) -> list:
     all_files_and_dirs = glob.glob(basedir)
     all_files = filter(os.path.isfile, all_files_and_dirs)
@@ -26,24 +25,34 @@ def getFileDetails( fileName: str ) -> map:
     _, fname = os.path.split(fileName)
     details['filename'] = fname
 
-    # Each article starts with a comment containing metadata. Strip this out
-    mdEndIndex = fileContents.index('-->')
-    metadata = fileContents[5:mdEndIndex].splitlines()
-    fileContents = fileContents[mdEndIndex+4:]
+    # Each article should start with a comment containing metadata. Strip this out
+    try:
+        mdEndIndex = fileContents.index('-->')
+        metadata = fileContents[5:mdEndIndex].splitlines()
+        fileContents = fileContents[mdEndIndex+4:]
 
-    # The article's date and sort order (or position) are in the metadata
-    for mdLine in metadata:
-        curDetails = mdLine.split(":")
-        curKey = curDetails[0].strip()
-        curValue = curDetails[1].strip()
-        details[curKey] = curValue
+        # The article's date and sort order (or position) are in the metadata
+        for mdLine in metadata:
+            curDetails = mdLine.split(":")
+            curKey = curDetails[0].strip()
+            curValue = curDetails[1].strip()
+            details[curKey] = curValue
+
+    except Exception as exc:
+        print(f"Exception encountered when parsing file {fname}: {exc}. Skipping")
+        return None
+
 
     # The article's title is the same as the first <h2> header
-    startIdx = fileContents.index('<h2>') + 4
-    endIdx = fileContents.index('</h2>', startIdx)
-    details['title'] = fileContents[startIdx:endIdx]
-    details['contents'] = fileContents
-    return details
+    try:
+        startIdx = fileContents.index('<h2>') + 4
+        endIdx = fileContents.index('</h2>', startIdx)
+        details['title'] = fileContents[startIdx:endIdx]
+        details['contents'] = fileContents
+        return details
+    except Exception as exc2:
+        print(f"Exception encountered when parsing the title from {fname}: {exc}. Skipping")
+        return None
 
 def buildNavTree( articles: list, short_length: int) -> map:
     longNavList = list()
@@ -81,12 +90,13 @@ if __name__ == "__main__":
     all_article_details = list()
     for cur_article in all_article_names:
         details = getFileDetails(cur_article)
-        all_article_details.append(details)
+        if details is not None:
+            all_article_details.append(details)
 
     all_article_details.sort(key=lambda x: int(x['Position']))
 
     lists = buildNavTree(all_article_details, 5)
-    shortNavString = "".join(lists['shortNavList'])
+    shortNavString = "\n".join(lists['shortNavList'])
 
     for cur_article in all_article_details:
         publishArticle(article_template_file, cur_article, 
